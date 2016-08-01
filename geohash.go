@@ -73,14 +73,14 @@ func GeoDecode(hash string) *GeoLocation {
 		for x := 4; x >= 0; x-- {
 			bit := idx >> uint(x) & 1
 			if even {
-				lonMid := (lonRange[0] + lonRange[1]) / 2
+				lonMid := middle(lonRange)
 				if bit == 1 {
 					lonRange[0] = lonMid
 				} else {
 					lonRange[1] = lonMid
 				}
 			} else {
-				latMid := (latRange[0] + latRange[1]) / 2
+				latMid := middle(latRange)
 				if bit == 1 {
 					latRange[0] = latMid
 				} else {
