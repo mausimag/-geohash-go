@@ -20,37 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package geohash
+package geolib
 
 import "strings"
 
 // GeoLocation holds geo location info
 type GeoLocation struct {
-	lat       float32
-	lon       float32
-	precision uint16
-}
-
-var (
-	latRange  = []float32{-90.0, 90.0}
-	lonRange  = []float32{-180.0, 180.0}
-	bits      = []int32{16, 8, 4, 2, 1}
-	geoBase32 = "0123456789bcdefghjkmnpqrstuvwxyz"
-)
-
-func middle(r []float32) float32 {
-	return (r[0] + r[1]) / 2
+	lat float64
+	lon float64
 }
 
 // GeoEncode encodes GeoLocation
-func GeoEncode(gl *GeoLocation) string {
+func GeoEncode(gl *GeoLocation, precision int) string {
 	var geohash string
 	var bit int
 	var idx int32
+	lonRange := []float64{-180, 180}
+	latRange := []float64{-90, 90}
 	even := true
 
-	for len(geohash) < int(gl.precision) {
-		lonMid := middle(lonRange)
+	for len(geohash) < precision {
+		lonMid := (lonRange[1] + lonRange[0]) / 2
 		if even {
 			if gl.lon > lonMid {
 				idx |= bits[bit]
@@ -59,7 +49,7 @@ func GeoEncode(gl *GeoLocation) string {
 				lonRange[1] = lonMid
 			}
 		} else {
-			latMid := middle(latRange)
+			latMid := (latRange[1] + latRange[0]) / 2
 			if gl.lat > latMid {
 				idx |= bits[bit]
 				latRange[0] = latMid
@@ -87,6 +77,8 @@ func GeoDecode(hash string) *GeoLocation {
 	geo := &GeoLocation{}
 	l := len(hash)
 	even := true
+	lonRange := []float64{-180, 180}
+	latRange := []float64{-90, 90}
 
 	for i := 0; i < l; i++ {
 		c := string(hash[i])
@@ -95,14 +87,14 @@ func GeoDecode(hash string) *GeoLocation {
 		for x := 4; x >= 0; x-- {
 			bit := idx >> uint(x) & 1
 			if even {
-				lonMid := middle(lonRange)
+				lonMid := (lonRange[1] + lonRange[0]) / 2
 				if bit == 1 {
 					lonRange[0] = lonMid
 				} else {
 					lonRange[1] = lonMid
 				}
 			} else {
-				latMid := middle(latRange)
+				latMid := (latRange[1] + latRange[0]) / 2
 				if bit == 1 {
 					latRange[0] = latMid
 				} else {
@@ -116,7 +108,6 @@ func GeoDecode(hash string) *GeoLocation {
 
 	geo.lat = (latRange[0] + latRange[1]) / 2
 	geo.lon = (lonRange[0] + lonRange[1]) / 2
-	geo.precision = uint16(l)
 
 	return geo
 }
