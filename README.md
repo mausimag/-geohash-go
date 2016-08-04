@@ -25,13 +25,3 @@ fmt.Printf("Encoded: [%s]", encoded)
 decoded := GeoDecode("gbsuv7z7x")
 fmt.Printf("Decoded: [%v, %v]", decoded.lat, decoded.lon)
 ```
-
-## Methods
-
-### GeoEncode(GeoLocation, precision) string
-
-### GeoDecode(hashstring) GeoLocation
-
-### DistanceBoundingCheck(sourceLat, sourceLon, distance) (topLeft GeoLocation, bottomRight GeoLocation)
-
-### IsGeoLocationInArea(InitialGeoLocation, topLeft, bottomRight GeoLocation) bool
