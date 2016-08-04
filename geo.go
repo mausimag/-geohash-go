@@ -1,12 +1,12 @@
 package geolib
 
 const (
-	earthMinorAxis = 6356752.314245
-	pi             = 3.14159265358979323846
-	minLat         = -90.0
-	maxLat         = 90.0
-	minLon         = -180.0
-	maxLon         = 180.0
+	geoEarthMinorAxis = 6356752.314245
+	geoPI             = 3.14159265358979323846
+	geoMinLat         = -90.0
+	geoMaxLat         = 90.0
+	geoMinLon         = -180.0
+	geoMaxLon         = 180.0
 	geoBase32      = "0123456789bcdefghjkmnpqrstuvwxyz"
 )
 
@@ -19,9 +19,9 @@ func kmToM(kmv float64) float64 {
 }
 
 func toRadians(ang float64) float64 {
-	return ang / 180.0 * pi
+	return ang / 180.0 * geoPI
 }
 
 func toDegrees(angrad float64) float64 {
-	return angrad * 180.0 / pi
+	return angrad * 180.0 / geoPI
 }

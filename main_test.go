@@ -27,6 +27,8 @@ func Test_Geohash(t *testing.T) {
 }
 
 func Test_DistanceBoundingCheck(t *testing.T) {
+	assert := assert.New(t)
+
 	var points = []GeoLocation{
 		GeoLocation{
 			lat: -20.279877,
@@ -49,8 +51,11 @@ func Test_DistanceBoundingCheck(t *testing.T) {
 	topLeft, bottomRight := DistanceBoundingCheck(points[0].lat, points[0].lon, 1.0)
 	t.Logf("Result: topLeft: [%v, %v], bottomRight: [%v, %v]", topLeft.lat, topLeft.lon, bottomRight.lat, bottomRight.lon)
 
-	for _, p := range points {
+	expected := []bool{true, true, true, false}
+
+	for idx, p := range points {
 		r := IsGeoLocationInArea(&p, &topLeft, &bottomRight)
 		t.Logf("Decoded: [%v, %v] - %v", p.lat, p.lon, r)
+		assert.Equal(expected[idx], r)
 	}
 }

@@ -3,7 +3,7 @@ package geolib
 import "math"
 
 func DistanceBoundingCheck(slat, slon float64, distance float64) (topLeft GeoLocation, bottomRight GeoLocation) {
-	radDist := kmToM(distance) / earthMinorAxis
+	radDist := kmToM(distance) / geoEarthMinorAxis
 
 	radLat := toRadians(slat)
 	radLon := toRadians(slon)
@@ -13,21 +13,21 @@ func DistanceBoundingCheck(slat, slon float64, distance float64) (topLeft GeoLoc
 
 	var _minLon, _maxLon float64
 
-	if _minLat > minLat && _maxLat < maxLat {
+	if _minLat > geoMinLat && _maxLat < geoMaxLat {
 		deltaLon := math.Asin(math.Sin(radDist) / math.Cos(radLat))
 		_minLon = radLon - deltaLon
-		if _minLon < minLon {
-			_minLon += 2 * pi
+		if _minLon < geoMinLon {
+			_minLon += 2 * geoPI
 		}
 		_maxLon = radLon + deltaLon
-		if _maxLon > maxLon {
-			_maxLon += 2 * pi
+		if _maxLon > geoMaxLon {
+			_maxLon += 2 * geoPI
 		}
 	} else {
-		_minLat = math.Max(_minLat, minLat)
-		_maxLat = math.Min(_maxLat, maxLat)
-		_minLon = minLon
-		_maxLon = maxLon
+		_minLat = math.Max(_minLat, geoMinLat)
+		_maxLat = math.Min(_maxLat, geoMaxLat)
+		_minLon = geoMinLon
+		_maxLon = geoMaxLon
 	}
 
 	topLeft = GeoLocation{
